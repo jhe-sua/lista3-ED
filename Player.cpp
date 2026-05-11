@@ -4,8 +4,14 @@
 using namespace std;
 
 
-// Usamos uma lista de inicialização
-// Usamos move 
+Player::Player()
+    : id {0}
+    , name {""}
+    , score {0}
+    , timetamp {0}
+{
+}
+
 Player::Player(int id, string name, int score, int timestamp)
     : id {id}
     , name {move(name)}
@@ -15,39 +21,40 @@ Player::Player(int id, string name, int score, int timestamp)
 }
 
 // Getters e Setters
-
-// id
-int Player::GetId() const
+int Player::getId() const
 {
     return id;
 }
-std::string Player::GetName() const
+
+std::string Player::getName() const
 {
     return name;
 }
-int Player::GetScore() const
+
+int Player::getScore() const
 {
     return score;
 }
-int Player::GetTimestamp() const
+
+int Player::getTimestamp() const
 {
     return timestamp;
 }
 
 
-void Player::SetId(int id)
+void Player::setId(int id)
 {
     this->id = id;
 }
-void Player::SetName(std::string name)
+void Player::setName(std::string name)
 {
     this->name = name;
 }
-void Player::SetScore(int score)
+void Player::setScore(int score)
 {
     this->score = score;
 }
-void Player::SetTimestamp(int timestamp)
+void Player::setTimestamp(int timestamp)
 {
     this->timestamp = timestamp;
 }

@@ -1,7 +1,7 @@
-#ifndef PLAYER
-#define PLAYER
+#ifndef PLAYER_HPP
+#define PLAYER_HPP
 
-#include <iostream>
+#include <string>
 
 class Player
 {
@@ -21,15 +21,15 @@ public:
     );
     ~Player() = default;
 
-    int GetId() const;
-    std::string GetName() const;
-    int GetScore() const;
-    int GetTimestamp() const;
+    int getId() const;
+    std::string getName() const;
+    int getScore() const;
+    int getTimestamp() const;
 
-    void SetId(int id);
-    void SetName(std::string name);
-    void SetScore(int score);
-    void SetTimestamp(int timestamp);
+    void setId(int id);
+    void setName(std::string name);
+    void setScore(int score);
+    void setTimestamp(int timestamp);
 
 };
 

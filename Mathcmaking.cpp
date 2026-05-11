@@ -1,10 +1,147 @@
 #include "Matchmaking.hpp"
 
 
-Matchmaking::Matchmaking(/* args */)
+Matchmaking::Matchmaking()
+    : size {0}
 {
 }
 
-Matchmaking::~Matchmaking()
+bool Matchmaking::insert(Player player)
 {
+    if(size == MAX_PLAYERS)
+        return false;
+
+    players[size - 1] = player;
+    return true;
 }
+
+// Há forma melhor de fazer?
+bool Matchmaking::removePlayer(int id)
+{
+    // Verificando o último
+    if(players[size - 1].getId() == id)
+    {
+        size--;
+        return true;
+    }
+
+    int index = 0;
+    while(index < (size - 1))
+    {
+        if(players[index].getId() == id)
+        {
+            for(int j = index; j < (size - 1); j++)
+            {
+                players[j] = players[j + 1];
+            }
+            
+            size--;
+        }
+
+        index++;
+    }
+    
+    return false;
+}
+
+void Matchmaking::sortByScoreInsertion()
+{
+    int i, j, current;
+    for (i = 1; i < size; i++)
+    {
+        current = players[i].getScore();
+        j = i - 1;
+
+        // Ordem crescente de score (e em empates, de timestamp)
+        while (j >= 0 && players[j].getScore() > current)
+        {
+            players[j+1] = players[j];
+            j = j - 1;
+        }
+        players[j + 1] = current;
+    }
+}
+
+bool Matchmaking::comesFirst(Player a, Player b)
+{
+    if(a.getScore() != b.getScore())
+        return a.getScore() < b.getScore();
+
+    return a.getTimestamp() < b.getTimestamp();
+        
+}
+
+void Matchmaking::merge(Player* arr, Player* aux, int start, int mid, int end)
+{
+    int i = start, k = start, j = mid + 1;
+
+    while(i <= mid && j <= end)
+    {
+        if(comesFirst(arr[i], arr[j]))
+        {
+            aux[k] = arr[i];
+            i++;
+            k++;
+        } else {
+            aux[k] = arr[j];
+            j++;
+            k++;
+        }
+    }
+
+    while(i <= mid)
+    {
+        aux[k] = arr[i];
+        i++;
+        k++;
+    }
+
+    while(j <= end) 
+    {
+        aux[k] = arr[j];
+        j++;
+        k++;
+    }
+
+    // Atualizando arr
+    int l = start;
+    while(l <= end)
+    {
+        arr[l] = aux[l];
+        l++;
+    }
+}
+
+void Matchmaking::mergeSort(Player* arr, Player* aux, int start, int end)
+{
+    if(start == end) //(>=)?
+    {
+        return;
+    }
+
+    int mid = (start + end)/2;
+    mergeSort(arr, aux, start, mid);
+    mergeSort(arr, aux, mid + 1, end);
+    
+    merge(arr, aux, start, mid, end);
+}
+
+void Matchmaking::sortByScoreMerge()
+{
+    if(size <= 0)
+        return;
+
+    Player* aux = new Player[size];
+
+    int start = 0, end = size - 1;
+    mergeSort(players, aux, start, end);
+    delete[] aux;
+}
+
+Player* Matchmaking::formGroup(int groupSize, int delta, int* n);
+
+Player* Matchmaking::getWaitingPlayers(int* n);
+
+void Matchmaking::printWaitingPlayers();
+
+// Outros métodos auxiliares, se necessário
