@@ -1,5 +1,5 @@
 #include "Matchmaking.hpp"
-
+#include "Player.hpp"
 
 Matchmaking::Matchmaking()
     : size {0}
@@ -62,12 +62,12 @@ void Matchmaking::sortByScoreInsertion()
     }
 }
 
-bool Matchmaking::comesFirst(Player a, Player b)
+bool Matchmaking::comesFirst(Player* a, Player* b)
 {
-    if(a.getScore() != b.getScore())
-        return a.getScore() < b.getScore();
+    if((*a).getScore() != (*b).getScore())
+        return (*a).getScore() < (*b).getScore();
 
-    return a.getTimestamp() < b.getTimestamp();
+    return (*a).getTimestamp() < (*b).getTimestamp();
         
 }
 
@@ -77,7 +77,7 @@ void Matchmaking::merge(Player* arr, Player* aux, int start, int mid, int end)
 
     while(i <= mid && j <= end)
     {
-        if(comesFirst(arr[i], arr[j]))
+        if(comesFirst(&arr[i], &arr[j]))
         {
             aux[k] = arr[i];
             i++;
@@ -138,7 +138,62 @@ void Matchmaking::sortByScoreMerge()
     delete[] aux;
 }
 
-Player* Matchmaking::formGroup(int groupSize, int delta, int* n);
+bool removeSortedPlayers(int start, int end)
+{
+    // Partindo do presuposto de que players já está ordenado
+    if(start > end)
+        return false;
+
+    if(end > size - 1)
+        return false;
+    
+    int s = start, i = end + 1;
+
+    while(i < size)
+    {
+        players[s] = players[i];
+        s++;
+        i++;
+    }
+
+    size -= end - start + 1;
+    return true;
+}
+
+Player* Matchmaking::formGroup(int groupSize, int delta, int* n)
+{ 
+    // Partindo do presuposto que players já está ordenado
+    if(groupSize <= 0 || delta < 0)
+    {
+
+        *n = 0;
+        Player* group = nullptr;
+        return group;
+    }
+
+    int start = 0, end = groupSize - 1;
+    while(end < size)
+    {
+        if(delta >= (players[end].getScore() - players[start].getScore()))
+        {
+            Player* group = new Player[groupSize];
+            // Compondo group
+            for(int i = 0; i < groupSize; i++)
+            {
+                group[i] = players[start + i];
+            }
+            removeSortedPlayers(start, end);
+            *n = groupSize;
+            return group;
+        }
+        start++;
+        end++;
+    }
+
+    *n = 0;
+        Player* group = nullptr;
+        return group;
+}
 
 Player* Matchmaking::getWaitingPlayers(int* n);
 

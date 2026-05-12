@@ -11,6 +11,11 @@ private:
     Player players[MAX_PLAYERS];
     int size;
 
+    bool comesFirst(Player* a, Player* b);
+    void merge(Player* arr, Player* aux, int start, int mid, int end);
+    void mergeSort(Player* arr, Player* aux, int start, int end);
+    bool removeSortedPlayers(int start, int end);
+
 public:
 
     Matchmaking();
@@ -20,10 +25,6 @@ public:
     bool removePlayer(int id);
 
     void sortByScoreInsertion();
-    // Privar essas funções
-    Player* merge(Player* arr1,int n1, Player* arr2, int n2);
-    Player* mergeSortAuxiliar(Player* arr, int n);
-    // To achando isso bem feio, a função não é tecnicamente recursiva
     void sortByScoreMerge();
 
     Player* formGroup(int groupSize, int delta, int* n);
