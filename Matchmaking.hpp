@@ -17,7 +17,7 @@ private:
     void merge(Player* arr, Player* aux, int start, int mid, int end);
     void mergeSort(Player* arr, Player* aux, int start, int end);
     void printPlayer(Player* a);
-    
+
 public:
 
     Matchmaking();
@@ -35,6 +35,5 @@ public:
 
     void printWaitingPlayers();
 
-    // Outros métodos auxiliares, se necessário
 };
 #endif

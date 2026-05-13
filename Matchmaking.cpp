@@ -1,13 +1,12 @@
 #include "Matchmaking.hpp"
-#include "Player.hpp"
 #include <iostream>
 #include <iomanip>
-#include <string>
 
 Matchmaking::Matchmaking()
     : size {0}
 {
 }
+
 
 bool Matchmaking::insert(Player player)
 {
@@ -59,6 +58,7 @@ bool Matchmaking::comesFirst(Player* a, Player* b)
         
 }
 
+
 void Matchmaking::sortByScoreInsertion()
 {
     for(int i = 1; i < size; i++)
@@ -67,7 +67,7 @@ void Matchmaking::sortByScoreInsertion()
         int j = i - 1;
 
         // Ordem crescente de score (e em empates, de timestamp)
-        while (j >= 0 && !comesFirst( &current, &players[j]))
+        while (j >= 0 && comesFirst( &current, &players[j]))
         {
             players[j+1] = players[j];
             j = j - 1;
@@ -118,6 +118,7 @@ void Matchmaking::merge(Player* arr, Player* aux, int start, int mid, int end)
     }
 }
 
+
 void Matchmaking::mergeSort(Player* arr, Player* aux, int start, int end)
 {
     if(start >= end)
@@ -132,6 +133,7 @@ void Matchmaking::mergeSort(Player* arr, Player* aux, int start, int end)
     merge(arr, aux, start, mid, end);
 }
 
+
 void Matchmaking::sortByScoreMerge()
 {
     if(size <= 0)
@@ -143,6 +145,7 @@ void Matchmaking::sortByScoreMerge()
     mergeSort(players, aux, start, end);
     delete[] aux;
 }
+
 
 bool Matchmaking::removeSortedPlayers(int start, int end)
 {
@@ -166,10 +169,14 @@ bool Matchmaking::removeSortedPlayers(int start, int end)
     return true;
 }
 
+
 Player* Matchmaking::formGroup(int groupSize, int delta, int* n)
 { 
     // Partindo do presuposto que players já está ordenado
-    if(n = nullptr)
+    if(size <= 0)
+        return nullptr;
+
+    if(n == nullptr)
         return nullptr;
 
     if(groupSize <= 0 || delta < 0)
@@ -201,9 +208,10 @@ Player* Matchmaking::formGroup(int groupSize, int delta, int* n)
     return nullptr;
 }
 
+
 Player* Matchmaking::getWaitingPlayers(int* n)
 {
-    if(n = nullptr)
+    if(n == nullptr)
         return nullptr;
 
     if(size <= 0)
@@ -221,13 +229,7 @@ Player* Matchmaking::getWaitingPlayers(int* n)
     *n = size;
     return waitingPlayers;
 }
-/*
-Waiting Players:
-[1 | Ana   | 1000 | 1]
-[2 | Bruno | 1100 | 2]
 
-[id | nome | score | timestamp]
-*/
 
 void Matchmaking::printPlayer(Player* a)
 {
@@ -238,7 +240,6 @@ void Matchmaking::printPlayer(Player* a)
               << std::right << (*a).getTimestamp()
               << "]" << std::endl;
 }
-
 
 
 void Matchmaking::printWaitingPlayers()
@@ -257,4 +258,3 @@ void Matchmaking::printWaitingPlayers()
 
     return;
 }
-
