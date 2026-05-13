@@ -1,20 +1,19 @@
-#include <iostream>
 #include "Player.hpp"
-
-using namespace std;
+#include <utility>
+#include <string>
 
 
 Player::Player()
     : id {0}
     , name {""}
     , score {0}
-    , timetamp {0}
+    , timestamp {0}
 {
 }
 
-Player::Player(int id, string name, int score, int timestamp)
+Player::Player(int id, std::string name, int score, int timestamp)
     : id {id}
-    , name {move(name)}
+    , name {std::move(name)}
     , score {score}
     , timestamp {timestamp} 
 {
@@ -48,7 +47,7 @@ void Player::setId(int id)
 }
 void Player::setName(std::string name)
 {
-    this->name = name;
+    this->name = std::move(name);
 }
 void Player::setScore(int score)
 {
