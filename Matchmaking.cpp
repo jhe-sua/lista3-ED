@@ -1,5 +1,7 @@
 #include "Matchmaking.hpp"
 #include "Player.hpp"
+#include <iostream>
+#include <string>
 
 Matchmaking::Matchmaking()
     : size {0}
@@ -167,8 +169,7 @@ Player* Matchmaking::formGroup(int groupSize, int delta, int* n)
     {
 
         *n = 0;
-        Player* group = nullptr;
-        return group;
+        return nullptr;
     }
 
     int start = 0, end = groupSize - 1;
@@ -191,12 +192,60 @@ Player* Matchmaking::formGroup(int groupSize, int delta, int* n)
     }
 
     *n = 0;
-        Player* group = nullptr;
-        return group;
+    return nullptr;
 }
 
-Player* Matchmaking::getWaitingPlayers(int* n);
+Player* Matchmaking::getWaitingPlayers(int* n)
+{
+    if(size <= 0)
+    {
+        *n = 0;
+        return nullptr;
+    }
 
-void Matchmaking::printWaitingPlayers();
+    Player* waitingPlayers = new Player[size];
+    for(int i = 0; i < size; i++)
+    {
+        waitingPlayers[i] = players[i];
+    }
+    
+    *n = size;
+    return waitingPlayers;
+}
+/*
+Waiting Players:
+[1 | Ana   | 1000 | 1]
+[2 | Bruno | 1100 | 2]
 
-// Outros métodos auxiliares, se necessário
+[id | nome | score | timestamp]
+*/
+
+void Matchmaking::printPlayer(Player* a)
+{
+    cout << "[" 
+         << std::left << std::setw(2) << (*a).getId() << "| "
+         << std::left << std::setw(5) << (*a).getName() << " | "
+         << std::left << std::setw(4) << (*a).getScore() << " | "
+         << std::right << (*a).getTimestamp()
+         << "]" << endl;
+}
+
+
+
+void Matchmaking::printWaitingPlayers()
+{
+    cout << "Waiting Players:" << endl;
+    if(size <= 0)
+    {
+        cout << "(empty)" << endl;
+        return;
+    }
+
+    for(int j = 0; j < size; j++)
+    {
+        printPlayer(&player[i]);
+    }
+
+    return;
+}
+

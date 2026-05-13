@@ -12,10 +12,12 @@ private:
     int size;
 
     bool comesFirst(Player* a, Player* b);
-    void merge(Player* arr, Player* aux, int start, int mid, int end);
-    void mergeSort(Player* arr, Player* aux, int start, int end);
     bool removeSortedPlayers(int start, int end);
 
+    void merge(Player* arr, Player* aux, int start, int mid, int end);
+    void mergeSort(Player* arr, Player* aux, int start, int end);
+    void printPlayer(Player* a);
+    
 public:
 
     Matchmaking();
