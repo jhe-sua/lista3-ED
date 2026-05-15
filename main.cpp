@@ -110,10 +110,10 @@ int main()
     int m = -1;
     Player* group2 = M.formGroup(4, 25, &m);
 
-    cout << "Grupo:" <<"|";
+    cout << "Grupo 2:" <<"|";
     for(int i = 0; i < m; i++)
     {
-        cout << group[i].getName() << "|";
+        cout << group2[i].getName() << "|";
     }
     cout << endl << "m = "<< m << endl << endl;
 
@@ -131,6 +131,8 @@ int main()
         cout << wp[i].getName() << ", ";
     }
     cout << endl << "k = " << k << endl << endl;
+
+    delete[] wp;
 
     
     //deletando todos

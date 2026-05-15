@@ -128,7 +128,7 @@ void Matchmaking::merge(Player* arr, Player* aux, int start, int mid, int end)
 
 void Matchmaking::mergeSort(Player* arr, Player* aux, int start, int end)
 {
-    if(start >= end || start < 0 || end >= size)
+    if(start >= end)
     {
         return;
     }
