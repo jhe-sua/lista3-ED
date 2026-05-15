@@ -1,6 +1,5 @@
 #include "Matchmaking.hpp"
 #include <iostream>
-#include <iomanip>
 
 using namespace std;
 
@@ -177,13 +176,13 @@ bool Matchmaking::removeSortedPlayers(int start, int end)
 Player* Matchmaking::formGroup(int groupSize, int delta, int* n)
 { 
     // Partindo do presuposto que players já está ordenado
+    if(n == nullptr) return nullptr;
+
     if(size <= 0)
     {
         *n = 0;
         return nullptr;
     }
-
-    if(n == nullptr) return nullptr;
 
     if(groupSize <= 0 || delta < 0)
     {
@@ -217,8 +216,7 @@ Player* Matchmaking::formGroup(int groupSize, int delta, int* n)
 
 Player* Matchmaking::getWaitingPlayers(int* n)
 {
-    if(n == nullptr)
-        return nullptr;
+    if(n == nullptr) return nullptr;
 
     if(size <= 0)
     {
@@ -236,15 +234,25 @@ Player* Matchmaking::getWaitingPlayers(int* n)
     return waitingPlayers;
 }
 
+    //[id | nome | score | timestamp]
 
 void Matchmaking::printPlayer(Player* a)
 {
-    cout << "[" 
-         << left  << setw(2) << a->getId()    <<  "| "
-         << left  << setw(5) << a->getName()  << " | "
-         << left  << setw(4) << a->getScore() << " | "
-         << right << a->getTimestamp()
-         << "]" << endl;
+    cout << "[" << a->getId() <<  " | " << a->getName();
+
+         // Name com alinhamento mínimo de 5 caracteres
+         int lenghtNAME = 5 - a->getName().size(); 
+         if( lenghtNAME > 0 )
+         {
+            for(int i = 0; i < lenghtNAME; i++)
+            {
+                cout << " ";
+            }
+         }
+
+         cout << " | " << a->getScore() 
+              << " | " << a->getTimestamp()
+              <<  "]" << endl;
 }
 
 
@@ -263,4 +271,9 @@ void Matchmaking::printWaitingPlayers()
     }
 
     return;
+}
+
+void Matchmaking::resetMatchmaking()
+{
+    size = 0;
 }

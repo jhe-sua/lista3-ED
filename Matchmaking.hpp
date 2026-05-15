@@ -103,5 +103,7 @@ public:
      */
     void printWaitingPlayers();
 
+    void resetMatchmaking();
+
 };
 #endif
