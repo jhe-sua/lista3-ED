@@ -7,11 +7,7 @@ int main()
 {
     // Criação de Jogadores
     //[id | nome | score | timestamp]
-    Player p1 = Player(1000, "Ana", 5, 1);
-    Player p2 = Player(1001, "Bruno", 20, 2);
-    Player p3 = Player(1002, "Carlo", 50, 3);
-    Player p4 = Player(1003, "Dany", 100, 4);
-    Player p5 = Player(1005, "Enri", 30, 5);
+    
     
     Player ptutu = Player(1007, "Tutu", 1000, 6);
     Player pangel = Player(1006, "Angel", 1000, 7);
@@ -21,7 +17,6 @@ int main()
     Player plucas = Player(1010, "Lucas", 20, 11);
 
     // Criação de Matchmaking
-    Matchmaking M = Matchmaking();
 
 
     // Estado atual do sistema

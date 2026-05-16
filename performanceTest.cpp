@@ -7,28 +7,8 @@ using namespace std;
 using namespace std::chrono;
 
 
-// 1. Gerar players (dados pseudoaleatórios)
-// 2. Gerar os dois Matchmakings(?)
-// 3. Inserir players
-// 4. Para diferentes tamanhos de entrada, obter o tempo médio de cada 
-// algoritmo de ordenção em 5 repetições para entradas semelhantes.
-// n = 10
-// n = 100
-// n = 1000
-// n = 5000
-// n = 10000
-// n = 50000
-// n = 100000
-
-
-// 1. Gerar players (dados pseudoaleatórios)
-
-const int MAX_PLAYERS = 100000;
-
-void playersGenerator(Player* players, int maxPlayers, int maxScore)
+void PlayersGenerator(Player* players, int maxPlayers, int maxScore, mt19937& randomGen)
 {
-    // Semente fixa para resultados reproduzíveis
-    mt19937 randomGen(123456);
     uniform_int_distribution<int> dist(0, maxScore);
 
     for(int i = 0; i < maxPlayers; i++)
@@ -43,7 +23,7 @@ void playersGenerator(Player* players, int maxPlayers, int maxScore)
 }
 
 
-void insertNPlayers(Matchmaking* M, Player* players, int N)
+void InsertPlayers(Matchmaking* M, Player* players, int N)
 {
     for(int i = 0; i < N; i++)
     {
@@ -51,111 +31,85 @@ void insertNPlayers(Matchmaking* M, Player* players, int N)
     }
 }
 
-void averageTime(Matchmaking* M, int repetitions, int numberOfPlayers){}
 
-
-
-// n = 100
-// n = 1000
-// n = 5000
-// n = 10000
-// n = 50000
-// n = 100000
-/*
-
-MODELO DE USO:
-
-#include <chrono>
-#include <iostream>
-
-template <typename Func>
-long long medirTempoMicrosegundos(Func&& f)
-{
-    using clock = std::chrono::steady_clock;
-
-    auto start = clock::now();
-    f();
-    auto end = clock::now();
-
-    return std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-}
-
-*/
 int main()
 {
     // quero guardar os resultados e printar os resultados
     // Inicialização
+    int numberOfTests = 7;
     int testCases[7] = {10, 100, 1000, 5000, 10'000, 50'000, 100'000};
     int repetitions = 5;
-    Matchmaking IS = Matchmaking();
-    Matchmaking MS = Matchmaking();
+    Matchmaking* M = new Matchmaking();
+    mt19937 randomGen(123456);
 
-    long long timeIS[7];
-    long long timeMS[7];
+    long long timeIS[numberOfTests];
+    long long timeMS[numberOfTests];
+
 
     //Obtendo a média dos tempos
-    for(int i = 0; i < 7; i++)
+    for(int i = 0; i < numberOfTests; i++)
     {
         int n = testCases[i];
         Player* playersBase = new Player[n];
 
         long long resultIS = 0;
+        long long resultMS = 0;
 
         for(int j = 0; j < repetitions; j++)
         {
             // Gerando e inserindo Players
-            playersGenerator(playersBase, n, 5000);
-            insertNPlayers(&IS, playersBase, n);
+            PlayersGenerator(playersBase, n, 5000, randomGen);
+            InsertPlayers(M, playersBase, n);
 
+            // Insertion sort
             // Calculando o tempo
             auto start = steady_clock::now();
-            IS.sortByScoreInsertion();
+            M->sortByScoreInsertion();
             auto end = steady_clock::now();
-            auto dur = end - start;
+            auto durIS = end - start;
 
             // Guardando o resultado e resetando
-            resultIS += duration_cast<microseconds>(dur).count();
-            IS.resetMatchmaking();
+            resultIS += duration_cast<microseconds>(durIS).count();
+
+            M->resetMatchmaking();
+            InsertPlayers(M, playersBase, n);
+
+            // Merge Sort
+            // Calculando o tempo
+            start = steady_clock::now();
+            M->sortByScoreMerge();
+            end = steady_clock::now();
+            auto durMS = end - start;
+
+            // Guardando o resultado e resetando
+            resultMS += duration_cast<microseconds>(durMS).count();
+            M->resetMatchmaking();
         }
 
         timeIS[i] = resultIS / repetitions;
+        timeMS[i] = resultMS / repetitions;
 
         delete[] playersBase;
     }
 
+    // Printagem
+    cout <<  "| " << "Tamanho da entrada (n)" 
+         << " | " << "Tempo médio MS - O(nlog(n))" 
+         << " | " << "Tempo médio IS - O(n²)" 
+         << " |"  << endl;
+
+    for(int k = 0; k < numberOfTests; k++)
+    {
+        long long x = testCases[k];
+
+        cout <<  "| " << testCases[k] 
+             << " | " << timeMS[k] 
+             << " | " << timeIS[k]
+             << " |"  << endl;
+    }
+
+    delete M;
+
+
     return 0;
 }
-
-/*
-Esse código tem alguns problemas, o último que estudei rapidamente antes de 
-meu tempo acabar está no gerador de players. Com um seed fixa ele gera
-sempre os mesmos players, é preciso mudar isso.
-
-Esboço de solução do chat:
-
-void playersGenerator(Player* players, int maxPlayers, int maxScore, std::mt19937& randomGen)
-{
-    std::uniform_int_distribution<int> dist(0, maxScore);
-
-    for(int i = 0; i < maxPlayers; i++)
-    {
-        int id = i + 1;
-        int timestamp = i + 1;
-        std::string name = "Player" + std::to_string(i + 1);
-        int score = dist(randomGen);
-
-        players[i] = Player(id, name, score, timestamp);
-    }
-}
-
-no main:
-std::mt19937 randomGen(123456);
-
-na chamada:
-playersGenerator(playersBase, n, 5000, randomGen);
-
-
-aparentemente o problema está no gerador ser criado dentro da função, por
-por isso precisamos cria-lo no main. Se entender o q isso quer dizer, me 
-fala.
-*/
