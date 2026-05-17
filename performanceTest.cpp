@@ -6,7 +6,10 @@
 using namespace std;
 using namespace std::chrono;
 
-
+/*
+Comando para compilação:
+g++ performanceTest.cpp Matchmaking.cpp Player.cpp -o performanceTest
+*/
 void PlayersGenerator(Player* players, int maxPlayers, int maxScore, mt19937& randomGen)
 {
     uniform_int_distribution<int> dist(0, maxScore);
