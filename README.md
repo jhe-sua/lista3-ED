@@ -45,9 +45,11 @@ O projeto foi modularizado utilizando classes e possui a seguinte estrutura mín
 
 Os testes do sistema estão automatizados e embutidos diretamente no arquivo `main.cpp`. Para testar o sistema, basta compilar e executar o programa conforme as instruções acima. A execução irá percorrer e exibir sequencialmente no terminal os resultados dos seguintes casos de teste:
 
+* Funcionamento do sistema em estado vazio (nenhum players na fila);
 * Inserção de jogadores na fila;
 * Remoção de jogadores pelo ID;
-* Ordenação utilizando o algoritmo insertion sort;
+* Ordenação utilizando o algoritmo insertion sort (incluindo critérios de desempate pelo timestamp);
 * Ordenação utilizando o algoritmo merge sort (incluindo critérios de desempate pelo timestamp);
-* Tentativas de formação de grupo (com sucesso e sem sucesso) com base em um limite de diferença de score (`delta`);
-* Recuperação e exibição do estado atual do sistema.
+* Tentativas de formação de grupo (bem e mal sucedidas) com base em um limite de diferença de score (`delta`);
+* Capacidade do sistema em se resetar;
+* Gravação de estado e exibição do estado atual do sistema.
